@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>アルティメット1＋1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    #input {
+      width: 200px;
+      height: 30px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    #timer, #result, #message {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+  <script type="text/javascript">
+    var startTime;
+    var count = 0;
+    var timerId;
+
+    function startTimer() {
+      count = 0; // 入力回数をリセットする
+      document.getElementById("result").textContent = "入力回数: " + count; // リセットした入力回数を表示する
+
+      startTime = new Date().getTime();
+      timerId = setInterval(updateTimer, 1000);
+      updateTimer(); // タイマーを開始すると同時に初回の表示を更新する
+
+      // 入力欄を有効化し、貼り付け操作を無効化する
+      var inputElement = document.getElementById("input");
+      inputElement.disabled = false;
+      inputElement.onpaste = function(event) {
+        event.preventDefault();
+        document.getElementById("message").textContent = "(・・∂) ｱﾚ?簡単にペーストできると思った？何(´･д･`* = *´･д･)何?";
+      };
+    }
+
+    function updateTimer() {
+      var currentTime = new Date().getTime();
+      var elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+      var remainingSeconds = 10 - elapsedSeconds;
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timerId);
+        document.getElementById("timer").textContent = "タイマー終了";
+
+        // 入力欄を無効化する
+        document.getElementById("input").disabled = true;
+      } else {
+        document.getElementById("timer").textContent = "残り時間: " + remainingSeconds + "秒";
+      }
+    }
+
+    function handleInput() {
+      var input = document.getElementById("input").value;
+      if (input === "1+1=2") {
+        count++;
+        document.getElementById("input").value = ""; // 入力欄をクリアする
+      }
+      document.getElementById("result").textContent = "入力回数: " + count;
+    }
+
+    function shareOnTwitter() {
+      var score = count + "スコア\nアルティメット1+1";
+      var tweetUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(score);
+      window.open(tweetUrl);
+    }
+  </script>
+</head>
+<body>
+  <h1>アルティメット1+1</h1>
+  <p>1+1=2と入力しよう</p>
+  <input type="text" id="input" oninput="handleInput()" disabled /><br />
+  <button onclick="startTimer()">スタート</button><br />
+  <p id="timer">残り時間: 10秒</p>
+  <p id="result">入力回数: 0</p>
+  <p id="message"></p>
+  <button onclick="shareOnTwitter()">Twitterで共有</button>
+</body>
+</html>
